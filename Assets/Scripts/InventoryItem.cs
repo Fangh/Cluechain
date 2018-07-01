@@ -12,7 +12,17 @@ public class InventoryItem : MonoBehaviour
 
 	void Start()
 	{
+		GetComponent<Button>().onClick.AddListener(SetDescription);
+	}
 
+	void OnDestroy()
+	{
+		GetComponent<Button>().onClick.RemoveListener(SetDescription);
+	}
+
+	void SetDescription()
+	{
+		Inventory.Instance.SetDescription(myItem.description);
 	}
 
 	public void Initialize(Item i)

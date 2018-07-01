@@ -8,6 +8,12 @@ public class SpriteMapList : ScriptableObject
 {
 	public List<SpriteMap> list;
 
+	public static SpriteMapList Instance;
+
+	SpriteMapList()
+	{
+		Instance = this;
+	}
 
 	public Sprite GetSpriteByName(string name)
 	{

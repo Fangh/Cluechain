@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Loom.Unity3d;
 using DG.Tweening;
 
 public class Inventory : MonoBehaviour 
@@ -16,28 +15,32 @@ public class Inventory : MonoBehaviour
 
 	[Header("References")]
 	public GameObject toggleButton;
-	public InventoryItem[] slots; 
 	public Text descriptionText;
+	public InventoryItem[] slots; 
+	public string playerAdress;
+	public string playerPrivateKey;
 
 	[Header("Tweaking")]
 	public float openingOffset;
-	public Address owner;
 
 	[Header("Private")]
 	private bool isOpen = false;
 	private bool isLocked = false;
-	private List<Item> items = new List<Item>();
+	public List<Item> items = new List<Item>();
+	public static string URL = "http://192.168.86.31:8085";
 
 	// Use this for initialization
 	void Start () 
 	{
 		slots = GetComponentsInChildren<InventoryItem>();
+		Item i = Item.CreateInstance("adress", "moi", "book", "bonjour");
+		AddItem(i);
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		
+
 	}
 
 	public void AddItem(Item i)
@@ -46,6 +49,11 @@ public class Inventory : MonoBehaviour
 		items.Add(i);
 		int order = items.IndexOf(i);
 		slots[order].Initialize(i);
+	}
+
+	public void SetDescription(string des)
+	{
+		descriptionText.text = des;
 	}
 
 	public void Toggle()
