@@ -1,52 +1,52 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 using Nethereum.Contracts;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Hex.HexTypes;
 using Nethereum.JsonRpc.UnityClient;
 
-[CreateAssetMenu(fileName = "Item", menuName = "Create Item", order = 2)]
-public class Item : ScriptableObject 
+public class ItemContract : ScriptableObject 
 {
-	public string description;
-	public string owner;
-	public string iconName;
-	public string adress; //uniqueID
-
-	public SpriteMapList spriteMap;
-	public Sprite sprite;
 	private Contract contract;
 	private ItemGeneratorContract itemGenerator;
+	public string adress; //uniqueID
+	public string ABI = @"[{""constant"":true,""inputs"":[],""name"":""name"",""outputs"":[{""name"":"""",""type"":""string""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""constant"":true,""inputs"":[],""name"":""hash"",""outputs"":[{""name"":"""",""type"":""bytes32""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""constant"":true,""inputs"":[],""name"":""getName"",""outputs"":[{""name"":"""",""type"":""string""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""constant"":true,""inputs"":[],""name"":""getDescription"",""outputs"":[{""name"":"""",""type"":""string""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""constant"":true,""inputs"":[],""name"":""signature"",""outputs"":[{""name"":"""",""type"":""bytes32""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""constant"":false,""inputs"":[{""name"":""to"",""type"":""address""}],""name"":""delegate"",""outputs"":[{""name"":""onlyOwner"",""type"":""address""}],""payable"":false,""stateMutability"":""nonpayable"",""type"":""function""},{""constant"":true,""inputs"":[],""name"":""description"",""outputs"":[{""name"":"""",""type"":""string""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""constant"":true,""inputs"":[],""name"":""owner"",""outputs"":[{""name"":"""",""type"":""address""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""constant"":true,""inputs"":[],""name"":""icon"",""outputs"":[{""name"":"""",""type"":""string""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""constant"":true,""inputs"":[],""name"":""getIcon"",""outputs"":[{""name"":"""",""type"":""string""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""inputs"":[{""name"":""_hash"",""type"":""bytes32""},{""name"":""_name"",""type"":""string""},{""name"":""_description"",""type"":""string""},{""name"":""_icon"",""type"":""string""}],""payable"":false,""stateMutability"":""nonpayable"",""type"":""constructor""}]";
 
-	public string ABI = @"[{""constant"":true,""inputs"":[],""name"":""name"",""outputs"":[{""name"":"""",""type"":""string""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""constant"":true,""inputs"":[],""name"":""hash"",""outputs"":[{""name"":"""",""type"":""bytes32""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""constant"":true,""inputs"":[],""name"":""getName"",""outputs"":[{""name"":"""",""type"":""string""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""constant"":true,""inputs"":[],""name"":""getDescription"",""outputs"":[{""name"":"""",""type"":""string""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""constant"":true,""inputs"":[],""name"":""signature"",""outputs"":[{""name"":"""",""type"":""bytes32""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""constant"":false,""inputs"":[{""name"":""to"",""type"":""address""}],""name"":""delegate"",""outputs"":[{""name"":""onlyOwner"",""type"":""address""}],""payable"":false,""stateMutability"":""nonpayable"",""type"":""function""},{""constant"":true,""inputs"":[],""name"":""description"",""outputs"":[{""name"":"""",""type"":""string""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""constant"":true,""inputs"":[],""name"":""owner"",""outputs"":[{""name"":"""",""type"":""address""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""constant"":true,""inputs"":[],""name"":""icon"",""outputs"":[{""name"":"""",""type"":""string""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""constant"":true,""inputs"":[],""name"":""getIcon"",""outputs"":[{""name"":"""",""type"":""string""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""inputs"":[{""name"":""_hash"",""type"":""bytes32""},{""name"":""_name"",""type"":""string""},{""name"":""_description"",""type"":""string""},{""name"":""_icon"",""type"":""string""}],""payable"":false,""stateMutability"":""nonpayable"",""type"":""constructor""}]";	
+	public string itemName = null;
+	public string iconName = null;
+	public string description = null;
+	public string owner = null;
 
-	public static Item CreateInstance( string _adress, ItemGeneratorContract g)
+	private bool isGenerated = false;
+
+	public ItemContract(string a, ItemGeneratorContract g)
 	{
-		var data = ScriptableObject.CreateInstance<Item>();
-		data.Init(_adress, g);
-		return data;
-	}
-
-	public void Init(string _adress, ItemGeneratorContract g)
-	{
+		adress = a;
 		itemGenerator = g;
-		adress = _adress;
-		spriteMap = SpriteMapList.Instance;
-		GetDataOnBC();
 	}
 
-	public void GetDataOnBC()
+	void Start()
 	{
 		this.contract = new Contract (null, ABI, adress);
 
 		itemGenerator.StartCoroutine( GetName() );
 		itemGenerator.StartCoroutine( GetIcon() );
-		itemGenerator.StartCoroutine( GetDescription() );	
+		itemGenerator.StartCoroutine( GetDescription() );		
 	}
 
-	
+	void Update()
+	{
+		if ( !isGenerated
+		&& null != itemName
+		&& null != iconName
+		&& null != description
+		&& null != owner )
+		{
+			isGenerated = true;
+		}
+	}
+
 	#region list of all functions in the contract
 	
 	public Function ContractDelegate () {
@@ -159,10 +159,10 @@ public class Item : ScriptableObject
 		if (request.Exception == null) 
 		{
 			var function = ContractGetName();
-			name = itemGenerator.ResultToString(function, request.Result);
+			itemName = itemGenerator.ResultToString(function, request.Result);
 			// itemListLength = System.Int32.Parse( request.Result, NumberStyles.AllowHexSpecifier );
 			Debug.Log ("item name (HEX): " + request.Result);
-			Debug.Log ("item name (string):" + name);
+			Debug.Log ("item name (string):" + itemName);
 		}
 		else 
 		{
@@ -185,7 +185,6 @@ public class Item : ScriptableObject
 		{
 			var function = ContractGetIcon();
 			iconName = itemGenerator.ResultToString(function, request.Result);
-			sprite = spriteMap.GetSpriteByName(iconName);
 			// itemListLength = System.Int32.Parse( request.Result, NumberStyles.AllowHexSpecifier );
 			Debug.Log ("item icon (HEX): " + request.Result);
 			Debug.Log ("item icon (string):" + iconName);
@@ -246,10 +245,4 @@ public class Item : ScriptableObject
 	}
 
 	#endregion
-}
-
-public enum ItemMode
-{
-	ingame,
-	inventory
 }

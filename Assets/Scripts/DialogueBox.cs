@@ -16,7 +16,14 @@ public class DialogueBox : MonoBehaviour
 	public Text title;
 	public Text dialogue;
 
-	private bool isOpen = false;
+	public bool isOpen = false;
+	private bool textIsDisplayed = false;
+
+	void Start()
+	{
+		if (isOpen)
+			textIsDisplayed = true;
+	}
 	
 
 	public void DisplayDialogue(string t, string d)
@@ -25,18 +32,22 @@ public class DialogueBox : MonoBehaviour
 			return;
 
 		dialogueBox.SetActive(true);
-		dialogue.DOText(d, 3f).SetEase(Ease.Linear);
-		title.text = t;
+		dialogue.DOText(d, 3f).SetEase(Ease.Linear).OnComplete( () => { 
+			textIsDisplayed = true;
+		});
 		isOpen = true;
+
+		title.text = t;
 	}
 
 	void Update()
 	{
-		if (isOpen)
+		if (isOpen && textIsDisplayed)
 		{
 			if (Input.anyKeyDown || Input.GetMouseButtonDown(0))
 			{
 				isOpen = false;
+				textIsDisplayed = false;
 				dialogue.text = "";
 				title.text = "";
 				dialogueBox.SetActive(false);

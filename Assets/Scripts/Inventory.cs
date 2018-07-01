@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using System;
 
 public class Inventory : MonoBehaviour 
 {
@@ -14,33 +15,52 @@ public class Inventory : MonoBehaviour
 	}
 
 	[Header("References")]
-	public GameObject toggleButton;
 	public Text descriptionText;
 	public InventoryItem[] slots; 
-	public string playerAdress;
-	public string playerPrivateKey;
+	public string playerPrivateKey = "1";
 
 	[Header("Tweaking")]
-	public float openingOffset;
+	public float openingOffset = 480;
 
 	[Header("Private")]
 	private bool isOpen = false;
 	private bool isLocked = false;
 	public List<Item> items = new List<Item>();
-	public static string URL = "http://192.168.86.31:8085";
+	public static string URL = "http://192.168.203.101:8085";
+	public string playerAdress;
 
 	// Use this for initialization
 	void Start () 
 	{
+		importAccountFromPrivateKey();
+
+
 		slots = GetComponentsInChildren<InventoryItem>();
-		Item i = Item.CreateInstance("adress", "moi", "book", "bonjour");
-		AddItem(i);
+		// Item i = Item.CreateInstance("adress", "moi", "book", "bonjour");
+		// AddItem(i);
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
 
+	}
+
+	public void importAccountFromPrivateKey () 
+	{
+		// Here we try to get the public address from the secretKey we defined
+		try 
+		{
+			var address = Nethereum.Signer.EthECKey.GetPublicAddress (playerPrivateKey);
+			// Then we define the accountAdress private variable with the public key
+			playerAdress = address;
+			Debug.Log("you are playing with this adress: " + playerAdress);
+		} 
+		catch (Exception e) 
+		{
+			// If we catch some error when getting the public address we just display the exception in the console
+			Debug.Log("Error importing account from PrivateKey: " + e);
+		}
 	}
 
 	public void AddItem(Item i)
@@ -64,8 +84,7 @@ public class Inventory : MonoBehaviour
 		if ( isOpen )
 		{
 			isLocked = true;
-			toggleButton.transform.DOScaleY(-1, 1f);
-			transform.DOLocalMoveY(transform.localPosition.y - openingOffset, 1f).SetEase(Ease.InBack).OnComplete( () => {
+			transform.DOLocalMoveX(transform.localPosition.x - openingOffset, 1f).SetEase(Ease.InBack).OnComplete( () => {
 				isOpen = false;
 				isLocked = false;
 			});
@@ -73,8 +92,7 @@ public class Inventory : MonoBehaviour
 		else
 		{
 			isLocked = true;
-			toggleButton.transform.DOScaleY(1, 1f);
-			transform.DOLocalMoveY(transform.localPosition.y + openingOffset, 1f).SetEase(Ease.OutBack).OnComplete( () => {
+			transform.DOLocalMoveX(transform.localPosition.x + openingOffset, 1f).SetEase(Ease.OutBack).OnComplete( () => {
 				isOpen = true;
 				isLocked = false;
 			});

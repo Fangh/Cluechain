@@ -9,51 +9,59 @@ using UnityEngine;
 using System.Collections.Generic;
 using Nethereum.JsonRpc.UnityClient;
 using System.Collections;
+using System.Threading.Tasks;
 
 public class ItemGeneratorContract : MonoBehaviour
 {
-	public static string ABI = @"[{""constant"": true,""inputs"": [],""name"": ""itemListLenght"",""outputs"": [{""name"": """",""type"": ""uint256""}],""payable"": false,""stateMutability"": ""view"",""type"": ""function""},{""constant"": true,""inputs"": [{""name"": """",""type"": ""address""}],""name"": ""holders"",""outputs"": [{""name"": """",""type"": ""address""}],""payable"": false,""stateMutability"": ""view"",""type"": ""function""},{""constant"": false,""inputs"": [{""name"": ""to"",""type"": ""address""},{""name"": ""itemFrom"",""type"": ""address""},{""name"": ""itemTo"",""type"": ""address""}],""name"": ""proposeExchange"",""outputs"": [],""payable"": false,""stateMutability"": ""nonpayable"",""type"": ""function""},{""constant"": false,""inputs"": [{""name"": ""from"",""type"": ""address""},{""name"": ""itemFrom"",""type"": ""address""},{""name"": ""itemTo"",""type"": ""address""}],""name"": ""acceptExchange"",""outputs"": [],""payable"": false,""stateMutability"": ""nonpayable"",""type"": ""function""},{""constant"": false,""inputs"": [{""name"": ""item"",""type"": ""address""}],""name"": ""addItem"",""outputs"": [],""payable"": false,""stateMutability"": ""nonpayable"",""type"": ""function""},{""constant"": true,""inputs"": [{""name"": """",""type"": ""bytes32""}],""name"": ""deals"",""outputs"": [{""name"": ""exist"",""type"": ""bool""},{""name"": ""from"",""type"": ""address""},{""name"": ""to"",""type"": ""address""},{""name"": ""fromOk"",""type"": ""bool""},{""name"": ""toOk"",""type"": ""bool""},{""name"": ""itemFrom"",""type"": ""address""},{""name"": ""itemTo"",""type"": ""address""}],""payable"": false,""stateMutability"": ""view"",""type"": ""function""},{""constant"": false,""inputs"": [{""name"": ""to"",""type"": ""address""},{""name"": ""itemAddr"",""type"": ""address""}],""name"": ""delegate"",""outputs"": [{""name"": ""onlyOwner"",""type"": ""address""}],""payable"": false,""stateMutability"": ""nonpayable"",""type"": ""function""},{""constant"": true,""inputs"": [],""name"": ""owner"",""outputs"": [{""name"": """",""type"": ""address""}],""payable"": false,""stateMutability"": ""view"",""type"": ""function""},{""constant"": true,""inputs"": [{""name"": """",""type"": ""uint256""}],""name"": ""items"",""outputs"": [{""name"": """",""type"": ""address""}],""payable"": false,""stateMutability"": ""view"",""type"": ""function""},{""inputs"": [],""payable"": false,""stateMutability"": ""nonpayable"",""type"": ""constructor""}]";
-	private static string contractAddress = "0x48e5841d5edb6c74b6c13870dae12f5ea9ad0eeb";
+	public static string ABI = @"[{""constant"":true,""inputs"":[{""name"":"""",""type"":""address""}],""name"":""holders"",""outputs"":[{""name"":"""",""type"":""address""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""constant"":false,""inputs"":[{""name"":""to"",""type"":""address""},{""name"":""itemFrom"",""type"":""address""},{""name"":""itemTo"",""type"":""address""}],""name"":""proposeExchange"",""outputs"":[{""name"":"""",""type"":""bytes32""}],""payable"":false,""stateMutability"":""nonpayable"",""type"":""function""},{""constant"":true,""inputs"":[],""name"":""nbDeal"",""outputs"":[{""name"":"""",""type"":""uint256""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""constant"":true,""inputs"":[],""name"":""itemListLength"",""outputs"":[{""name"":"""",""type"":""uint256""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""constant"":false,""inputs"":[{""name"":""from"",""type"":""address""},{""name"":""itemFrom"",""type"":""address""},{""name"":""itemTo"",""type"":""address""}],""name"":""acceptExchange"",""outputs"":[{""name"":"""",""type"":""bytes32""}],""payable"":false,""stateMutability"":""nonpayable"",""type"":""function""},{""constant"":false,""inputs"":[{""name"":""item"",""type"":""address""}],""name"":""addItem"",""outputs"":[],""payable"":false,""stateMutability"":""nonpayable"",""type"":""function""},{""constant"":true,""inputs"":[{""name"":"""",""type"":""bytes32""}],""name"":""deals"",""outputs"":[{""name"":""exist"",""type"":""bool""},{""name"":""from"",""type"":""address""},{""name"":""to"",""type"":""address""},{""name"":""fromOk"",""type"":""bool""},{""name"":""toOk"",""type"":""bool""},{""name"":""itemFrom"",""type"":""address""},{""name"":""itemTo"",""type"":""address""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""constant"":false,""inputs"":[{""name"":""to"",""type"":""address""},{""name"":""itemAddr"",""type"":""address""}],""name"":""delegate"",""outputs"":[{""name"":""onlyOwner"",""type"":""address""}],""payable"":false,""stateMutability"":""nonpayable"",""type"":""function""},{""constant"":true,""inputs"":[],""name"":""owner"",""outputs"":[{""name"":"""",""type"":""address""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""constant"":true,""inputs"":[{""name"":"""",""type"":""uint256""}],""name"":""items"",""outputs"":[{""name"":"""",""type"":""address""}],""payable"":false,""stateMutability"":""view"",""type"":""function""},{""inputs"":[],""payable"":false,""stateMutability"":""nonpayable"",""type"":""constructor""}]";
+	private static string contractAddress = "0xe25f8387b587169d800ee4cf214bcae4ae2561c4";
 	private Contract contract;
 
 	public List<string> itemAdresses = new List<string>();
 	public int itemListLength = 0;
-	public string[] items;
 
-	private string allItemsInOneString;
+	public List<Item> items = new List<Item>();
+
+	public bool AllItemsGetted = false;
 
 	public ItemGeneratorContract () 
 	{
 		this.contract = new Contract (null, ABI, contractAddress);
 	}
 
+	void Update()
+	{
+		if ( !AllItemsGetted && itemListLength != 0 && itemAdresses.Count == itemListLength)
+		{
+			AllItemsGetted = true;
+			GenerateItems();
+		}
+	}
+
 	[ContextMenu ("get item list length")]
 	public void GetItemsListLengthFromBC()
 	{
-		StartCoroutine( GetItemsListLenght() );
+		StartCoroutine( GetItemsListLength() );
 	}
 
 	[ContextMenu ("Get items from Blockchains")]
 	public void GetItemsFromBC()
 	{
-		StartCoroutine( GetItems() );
-		FilterItems();
-		FillItemAdresses();
+		for (int i = 0; i < itemListLength; i++)
+		{
+			StartCoroutine( GetItems(i) );
+		}
+		// FilterItems();
+		// FillItemAdresses();
 		// create every items from adresses ?
 	}
 
-	public void FillItemAdresses()
+	public void GenerateItems()
 	{
-		for (int i = 0; i< itemListLength; i++)
-		{
-			itemAdresses.Add( items[i] );
+		for (int i = 0; i<itemAdresses.Count; i++)
+		{		
+			items.Add( Item.CreateInstance(itemAdresses[i], this) );
 		}
-	}
-
-	[ContextMenu ("List item list")]
-	public void FilterItems()
-	{
-		//parse allItemsInOneString and put every items in items
 	}
 
 	#region list of all functions in the contract
@@ -62,8 +70,8 @@ public class ItemGeneratorContract : MonoBehaviour
 		return contract.GetFunction ("items");
 	}
 	
-	public Function ContractItemsListLenght () {
-		return contract.GetFunction ("itemListLenght");
+	public Function ContractItemsListLength () {
+		return contract.GetFunction ("itemListLength");
 	}
 	
 	public Function ContractProposeExchange () {
@@ -78,15 +86,15 @@ public class ItemGeneratorContract : MonoBehaviour
 
 	#region list of all the callings
 
-	public CallInput CallGetItems () 
+	public CallInput CallGetItems (int index) 
 	{
 		var function = ContractGetItems ();
-		return function.CreateCallInput ();
+		return function.CreateCallInput (index);
 	}
 	
-	public CallInput CallItemsListLenght () 
+	public CallInput CallItemsListLength () 
 	{
-		var function = ContractItemsListLenght ();
+		var function = ContractItemsListLength ();
 		return function.CreateCallInput ();
 	}
 	
@@ -195,21 +203,21 @@ public class ItemGeneratorContract : MonoBehaviour
 	}
 
 	
-	public IEnumerator GetItemsListLenght () 
+	public IEnumerator GetItemsListLength () 
 	{
 		var request = new EthCallUnityRequest (Inventory.URL);
 
-		var callInput = CallItemsListLenght ();
+		var callInput = CallItemsListLength ();
 		Debug.Log ("Getting item list length...");
 
 		yield return request.SendRequest (callInput, Nethereum.RPC.Eth.DTOs.BlockParameter.CreateLatest ());
 
 		if (request.Exception == null) 
 		{
-			// If we don't have exceptions we just display the raw result and the
-			// result decode it with our function (decodePings) from the service, congrats!
-			var function = ContractItemsListLenght();
-			itemListLength = int.Parse(ResultToString(function, request.Result));
+			var function = ContractItemsListLength();
+			// itemListLength = System.Int32.Parse( request.Result, NumberStyles.AllowHexSpecifier );
+			Debug.Log("string of result = " +  ResultToInt(function, request.Result));
+			itemListLength = ResultToInt(function, request.Result);
 			Debug.Log ("item list length (HEX): " + request.Result);
 			Debug.Log ("item list length (int):" + itemListLength);
 		}
@@ -220,11 +228,11 @@ public class ItemGeneratorContract : MonoBehaviour
 		}
 	}
 	
-	public IEnumerator GetItems () 
+	public IEnumerator GetItems (int index) 
 	{
 		var request = new EthCallUnityRequest (Inventory.URL);
 
-		var callInput = CallGetItems ();
+		var callInput = CallGetItems (index);
 		Debug.Log ("Getting all items...");
 
 		yield return request.SendRequest (callInput, Nethereum.RPC.Eth.DTOs.BlockParameter.CreateLatest ());
@@ -233,10 +241,11 @@ public class ItemGeneratorContract : MonoBehaviour
 		{
 			// If we don't have exceptions we just display the raw result and the
 			// result decode it with our function (decodePings) from the service, congrats!
-			var function = ContractItemsListLenght();
-			allItemsInOneString = ResultToString(function, request.Result);
+			var function = ContractGetItems();
+			itemAdresses.Add(ResultToString(function, request.Result));
+			// allItemsInOneString = 
 			Debug.Log ("items (HEX): " + request.Result);
-			Debug.Log ("items (string):" + allItemsInOneString);
+			Debug.Log ("items (string):" + itemAdresses[itemAdresses.Count - 1]);
 		}
 		else 
 		{
@@ -244,6 +253,28 @@ public class ItemGeneratorContract : MonoBehaviour
 			Debug.Log ("Error submitting item list length tx: " + request.Exception.Message);
 		}
 	}
+	
+	// public IEnumerator GetItems (string accountAddress, string accountPrivateKey, int index) 
+	// {
+	// 	var function = ContractGetItems ();
+	// 	var tx = function.CreateTransactionInput (accountAddress, new HexBigInteger (50000), new HexBigInteger (0), new HexBigInteger (0), index);
+
+	// 	// var item = await function.SendTransactionAndWaitForReceiptAsyncaccountAddress, new HexBigInteger (50000), new HexBigInteger (0), index);
+
+	// 	var transactionSignedRequest = new TransactionSignedUnityRequest (Inventory.URL, accountPrivateKey, accountAddress);
+
+	// 	// Then we send it and wait
+	// 	Debug.Log("Sending GetItems ("+index+") transaction (from = "+ accountAddress);
+	// 	yield return transactionSignedRequest.SignAndSendTransaction (tx);
+	// 	if (transactionSignedRequest.Exception == null) {
+	// 		// If we don't have exceptions we just display the result, congrats!
+	// 		Debug.Log ("GetItems transaction submitted: " + transactionSignedRequest.Result);
+	// 		Debug.Log ("GetItems transaction submitted (string): " + ResultToString(function, transactionSignedRequest.Result));
+	// 	} else {
+	// 		// if we had an error in the UnityRequest we just display the Exception error
+	// 		Debug.Log ("Error submitting GetItems transaction: " + transactionSignedRequest.Exception.Message);
+	// 	}
+	// }
 
 	#endregion
 
@@ -252,5 +283,17 @@ public class ItemGeneratorContract : MonoBehaviour
 	{
 		var function = f;
 		return function.DecodeSimpleTypeOutput<string>(result);
+	}
+	
+	public int ResultToInt(Function f, string result)
+	{
+		var function = f;
+		return function.DecodeSimpleTypeOutput<int>(result);
+	}
+
+	public long ResultToLong(Function f, string result)
+	{
+		var function = f;
+		return function.DecodeSimpleTypeOutput<long>(result);
 	}
 }

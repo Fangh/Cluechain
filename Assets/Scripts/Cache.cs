@@ -18,9 +18,12 @@ public class Cache : MonoBehaviour
 		
 	}
 
-	void OnMouseUp()
+	void OnMouseDown()
 	{
-		Inventory.Instance.AddItem(generatedItem);
-		GetComponent<BoxCollider2D>().enabled = false;
+		if (!DialogueBox.Instance.isOpen)
+		{
+			Inventory.Instance.AddItem(generatedItem);
+			GetComponent<BoxCollider2D>().enabled = false;			
+		}
 	}
 }

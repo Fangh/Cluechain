@@ -6,8 +6,9 @@ public class Hint : MonoBehaviour
 {
 	public string description;
 
-	void OnMouseUp()
+	void OnMouseDown()
 	{
-		DialogueBox.Instance.DisplayDialogue(name, description);
+		if (!DialogueBox.Instance.isOpen)
+			DialogueBox.Instance.DisplayDialogue(name, description);
 	}
 }
