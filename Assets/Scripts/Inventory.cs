@@ -28,7 +28,7 @@ public class Inventory : MonoBehaviour
 	public bool isOpen = false;
 	private bool isLocked = false;
 	public List<Item> items = new List<Item>();
-	public static string URL = "http://192.168.203.101:8085";
+	public static string URL = "http://192.168.202.216:8085";
 	public string playerAdress;
 	public bool gameIsPaused = false;
 
@@ -83,7 +83,7 @@ public class Inventory : MonoBehaviour
 	public void RemoveItem(Item i)
 	{
 		int order = items.IndexOf(i);
-		Debug.Log("items" + i.name + " is in order "+order+ " in you inventory");
+		// Debug.Log("items" + i.name + " is in order "+order+ " in you inventory");
 		slots[order].Empty();
 		items.Remove(i);
 

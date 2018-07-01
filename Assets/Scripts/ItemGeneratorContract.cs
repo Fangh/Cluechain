@@ -44,6 +44,15 @@ public class ItemGeneratorContract : MonoBehaviour
 		StartCoroutine( AcceptExchange(Inventory.Instance.playerAdress, Inventory.Instance.playerPrivateKey, theirItem.owner, theirItem.adress, myItem.adress ) );		
 	}
 
+	[ContextMenu ("propose exchange")]
+	public void ProposeExchange()
+	{
+		var rayman = "0x032c5e0d70ed4449d82950c101fab91277118028";
+		var lapin = "0xc90604c4dab68b3e5d74e9f4ddfa5c3daa5a22c5";
+		var lapinOwner = "0x175caac7e2be68f73ae81a6087ba85ed38c8198c";
+		StartCoroutine( ProposeExchange(Inventory.Instance.playerAdress, Inventory.Instance.playerPrivateKey, lapinOwner, rayman, lapin ) );		
+	}
+
 	public Item GetItemByName(string name)
 	{
 		for (int i = 0; i < itemDatabase.Count; i++)
@@ -109,6 +118,10 @@ public class ItemGeneratorContract : MonoBehaviour
 	public Function ContractAcceptExchange () {
 		return contract.GetFunction ("acceptExchange");
 	}
+	
+	public Function ContractGetDeals () {
+		return contract.GetFunction ("deals");
+	}
 
 	#endregion
 
@@ -135,6 +148,12 @@ public class ItemGeneratorContract : MonoBehaviour
 	public CallInput CallAcceptExchange () 
 	{
 		var function = ContractAcceptExchange ();
+		return function.CreateCallInput ();
+	}
+	
+	public CallInput CallGetDeals () 
+	{
+		var function = ContractGetDeals ();
 		return function.CreateCallInput ();
 	}
 

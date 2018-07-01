@@ -214,7 +214,7 @@ public class Item : ScriptableObject
 			var function = ContractGetDescription();
 			description = itemGenerator.ResultToString(function, request.Result);
 			// itemListLength = System.Int32.Parse( request.Result, NumberStyles.AllowHexSpecifier );
-			// Debug.Log ("item description (HEX): " + request.Result);
+			Debug.Log ("item description (HEX): " + request.Result);
 			Debug.Log ("item description (string):" + description);
 		}
 		else 
