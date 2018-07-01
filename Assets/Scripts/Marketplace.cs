@@ -73,6 +73,7 @@ public class Marketplace : MonoBehaviour
 
 	public void Approve()
 	{
+		ItemGeneratorContract.Instance.ApproveExchange( item1, item2 );
 		Inventory.Instance.RemoveItem(item1);
 		Inventory.Instance.AddItem(item2);
 		Close();

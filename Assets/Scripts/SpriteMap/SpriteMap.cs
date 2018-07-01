@@ -7,4 +7,5 @@ public class SpriteMap
 {
 	public string name = "SpriteName";
 	public Sprite sprite = null;
+	public Sprite picture = null;
 }

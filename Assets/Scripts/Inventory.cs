@@ -16,6 +16,8 @@ public class Inventory : MonoBehaviour
 
 	[Header("References")]
 	public Text descriptionText;
+	public Image picture;
+	public GameObject sidePanel;
 	public InventoryItem[] slots; 
 	public string playerPrivateKey = "1";
 
@@ -37,6 +39,7 @@ public class Inventory : MonoBehaviour
 
 
 		slots = GetComponentsInChildren<InventoryItem>();
+		sidePanel.SetActive(false);
 		// Item i = Item.CreateInstance("adress", "moi", "book", "bonjour");
 		// AddItem(i);
 	}
@@ -104,6 +107,7 @@ public class Inventory : MonoBehaviour
 		if ( isOpen )
 		{
 			isLocked = true;
+			sidePanel.SetActive(false);
 			transform.DOLocalMoveX(transform.localPosition.x - openingOffset, 1f).SetEase(Ease.InBack).OnComplete( () => {
 				isOpen = false;
 				isLocked = false;

@@ -10,25 +10,29 @@ public class InventoryItem : MonoBehaviour
 	public Item myItem;
 	public Image icon;
 
-	void Start()
+	void ShowDetails()
 	{
-		GetComponent<Button>().onClick.AddListener(SetDescription);
-	}
-
-	void OnDestroy()
-	{
-		GetComponent<Button>().onClick.RemoveListener(SetDescription);
-	}
-
-	void SetDescription()
-	{
-		Inventory.Instance.SetDescription(myItem.description);
+		if (Inventory.Instance.sidePanel.activeSelf
+		&& Inventory.Instance.picture.sprite == myItem.pictureSprite)
+		{
+			Inventory.Instance.sidePanel.SetActive(false);
+		}
+		else
+		{
+			Inventory.Instance.sidePanel.SetActive(true);
+			Inventory.Instance.descriptionText.text = myItem.description;
+			Inventory.Instance.picture.sprite = myItem.pictureSprite;
+		}
 	}
 
 	public void Initialize(Item i)
 	{
 		if ( i == null )
+		{
+			GetComponent<Button>().interactable = false;
 			return;
+		}
+		GetComponent<Button>().interactable = true;
 		myItem = i;
 		icon.sprite = myItem.sprite;
 		icon.gameObject.transform.localScale = Vector3.zero;
@@ -39,15 +43,6 @@ public class InventoryItem : MonoBehaviour
 	{
 		icon.sprite = null;
 		myItem = null;
-	}
-
-	void OnMouseOver()
-	{
-		Inventory.Instance.descriptionText.text = myItem.description;
-	}
-
-	void OnMouseExit()
-	{
-		Inventory.Instance.descriptionText.text = "";
+		GetComponent<Button>().interactable = false;
 	}
 }

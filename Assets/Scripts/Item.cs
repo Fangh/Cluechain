@@ -16,7 +16,8 @@ public class Item : ScriptableObject
 	public string adress; //uniqueID
 
 	public SpriteMapList spriteMap;
-	public Sprite sprite;
+	public Sprite sprite; //miniature
+	public Sprite pictureSprite; //big piture
 	private Contract contract;
 	private ItemGeneratorContract itemGenerator;
 
@@ -186,7 +187,8 @@ public class Item : ScriptableObject
 		{
 			var function = ContractGetIcon();
 			iconName = itemGenerator.ResultToString(function, request.Result);
-			sprite = spriteMap.GetSpriteByName(iconName);
+			sprite = spriteMap.GetPictureSpriteByName(iconName);
+			pictureSprite = spriteMap.GetPictureSpriteByName(iconName);
 			// itemListLength = System.Int32.Parse( request.Result, NumberStyles.AllowHexSpecifier );
 			// Debug.Log ("item icon (HEX): " + request.Result);
 			// Debug.Log ("item icon (string):" + iconName);
@@ -213,7 +215,7 @@ public class Item : ScriptableObject
 			description = itemGenerator.ResultToString(function, request.Result);
 			// itemListLength = System.Int32.Parse( request.Result, NumberStyles.AllowHexSpecifier );
 			// Debug.Log ("item description (HEX): " + request.Result);
-			// Debug.Log ("item description (string):" + description);
+			Debug.Log ("item description (string):" + description);
 		}
 		else 
 		{

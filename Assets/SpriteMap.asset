@@ -14,11 +14,16 @@ MonoBehaviour:
   list:
   - name: Baies Rayman
     sprite: {fileID: 21300000, guid: 83605af7ff61820489143229fef35115, type: 3}
+    picture: {fileID: 21300000, guid: ffd08268924b685499ff1d3e8ed67ce9, type: 3}
   - name: Rayman
     sprite: {fileID: 21300000, guid: 1108aa662173d4e49bcc4f2643a0bd6d, type: 3}
+    picture: {fileID: 21300000, guid: fc499a80d8cc4a24691e3dbd991f236c, type: 3}
   - name: Lapin Licorne
     sprite: {fileID: 21300000, guid: 2f2bf85b51939ea43a45aaa487cc0f64, type: 3}
+    picture: {fileID: 21300000, guid: 9f9767fa9e67ab24b8b3a1bae339558f, type: 3}
   - name: "El\xE9phant"
     sprite: {fileID: 21300000, guid: 982cf3679228a864e80cee7e54edac62, type: 3}
+    picture: {fileID: 21300000, guid: f6a5dea593f77ac4c9d4b918f894d8e2, type: 3}
   - name: "Alta\xEFr"
     sprite: {fileID: 21300000, guid: 5252adc8dd8995349b2d5318e0c4ce28, type: 3}
+    picture: {fileID: 21300000, guid: a601586d40b1682419d1a0cefaacf3ca, type: 3}

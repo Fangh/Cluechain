@@ -15,13 +15,25 @@ public class SpriteMapList : ScriptableObject
 		Instance = this;
 	}
 
-	public Sprite GetSpriteByName(string name)
+	public Sprite GetSpriteByName(string name) //get miniature
 	{
 		foreach (SpriteMap s in list)
 		{
 			if ( s.name == name)
 			{
 				return s.sprite;
+			}
+		}
+		return null;
+	}
+	
+	public Sprite GetPictureSpriteByName(string name) //get full pic
+	{
+		foreach (SpriteMap s in list)
+		{
+			if ( s.name == name)
+			{
+				return s.picture;
 			}
 		}
 		return null;

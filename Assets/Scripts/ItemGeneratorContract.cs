@@ -39,6 +39,11 @@ public class ItemGeneratorContract : MonoBehaviour
 		}
 	}
 
+	public void ApproveExchange(Item myItem, Item theirItem)
+	{
+		StartCoroutine( AcceptExchange(Inventory.Instance.playerAdress, Inventory.Instance.playerPrivateKey, theirItem.owner, theirItem.adress, myItem.adress ) );		
+	}
+
 	public Item GetItemByName(string name)
 	{
 		for (int i = 0; i < itemDatabase.Count; i++)
