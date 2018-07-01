@@ -19,14 +19,15 @@ public class ItemGeneratorContract : MonoBehaviour
 
 	public List<string> itemAdresses = new List<string>();
 	public int itemListLength = 0;
-
-	public List<Item> items = new List<Item>();
-
+	public List<Item> itemDatabase = new List<Item>();
 	public bool AllItemsGetted = false;
+
+	public static ItemGeneratorContract Instance;
 
 	public ItemGeneratorContract () 
 	{
 		this.contract = new Contract (null, ABI, contractAddress);
+		Instance = this;
 	}
 
 	void Update()
@@ -36,6 +37,28 @@ public class ItemGeneratorContract : MonoBehaviour
 			AllItemsGetted = true;
 			GenerateItems();
 		}
+	}
+
+	public Item GetItemByName(string name)
+	{
+		for (int i = 0; i < itemDatabase.Count; i++)
+		{
+			if ( itemDatabase[i].name == name)
+				return itemDatabase[i];
+		}
+		Debug.LogError("There is no object with this name");
+		return null;
+	}
+	
+	public Item GetItemByAdress(string _adress)
+	{
+		for (int i = 0; i < itemDatabase.Count; i++)
+		{
+			if ( itemDatabase[i].adress == _adress)
+				return itemDatabase[i];
+		}
+		Debug.LogError("There is no object with this adress");
+		return null;
 	}
 
 	[ContextMenu ("get item list length")]
@@ -60,7 +83,7 @@ public class ItemGeneratorContract : MonoBehaviour
 	{
 		for (int i = 0; i<itemAdresses.Count; i++)
 		{		
-			items.Add( Item.CreateInstance(itemAdresses[i], this) );
+			itemDatabase.Add( Item.CreateInstance(i, itemAdresses[i], this) );
 		}
 	}
 

@@ -23,11 +23,12 @@ public class Inventory : MonoBehaviour
 	public float openingOffset = 480;
 
 	[Header("Private")]
-	private bool isOpen = false;
+	public bool isOpen = false;
 	private bool isLocked = false;
 	public List<Item> items = new List<Item>();
 	public static string URL = "http://192.168.203.101:8085";
 	public string playerAdress;
+	public bool gameIsPaused = false;
 
 	// Use this for initialization
 	void Start () 
@@ -44,6 +45,11 @@ public class Inventory : MonoBehaviour
 	void Update () 
 	{
 
+	}
+
+	public void TogglePause( bool toggle )
+	{
+		gameIsPaused = toggle;
 	}
 
 	public void importAccountFromPrivateKey () 
@@ -70,6 +76,20 @@ public class Inventory : MonoBehaviour
 		int order = items.IndexOf(i);
 		slots[order].Initialize(i);
 	}
+	
+	public void RemoveItem(Item i)
+	{
+		int order = items.IndexOf(i);
+		Debug.Log("items" + i.name + " is in order "+order+ " in you inventory");
+		slots[order].Empty();
+		items.Remove(i);
+
+		for (int j = order; j < slots.Length-1; j++)
+		{
+			slots[j].myItem = slots[j+1].myItem;
+			slots[j].Initialize(slots[j].myItem);
+		}
+	}
 
 	public void SetDescription(string des)
 	{
@@ -87,6 +107,7 @@ public class Inventory : MonoBehaviour
 			transform.DOLocalMoveX(transform.localPosition.x - openingOffset, 1f).SetEase(Ease.InBack).OnComplete( () => {
 				isOpen = false;
 				isLocked = false;
+				Inventory.Instance.TogglePause(false);
 			});
 		}
 		else
@@ -95,6 +116,7 @@ public class Inventory : MonoBehaviour
 			transform.DOLocalMoveX(transform.localPosition.x + openingOffset, 1f).SetEase(Ease.OutBack).OnComplete( () => {
 				isOpen = true;
 				isLocked = false;
+				Inventory.Instance.TogglePause(true);
 			});
 		}		
 	}

@@ -12,7 +12,13 @@ MonoBehaviour:
   m_Name: SpriteMap
   m_EditorClassIdentifier: 
   list:
-  - name: book
-    sprite: {fileID: 21300000, guid: a97503e6fa6277d4ebb02517d3042962, type: 3}
-  - name: key
-    sprite: {fileID: 21300000, guid: 8390275630f204c48ba6086183501a42, type: 3}
+  - name: Baies Rayman
+    sprite: {fileID: 21300000, guid: 83605af7ff61820489143229fef35115, type: 3}
+  - name: Rayman
+    sprite: {fileID: 21300000, guid: 1108aa662173d4e49bcc4f2643a0bd6d, type: 3}
+  - name: Lapin Licorne
+    sprite: {fileID: 21300000, guid: 2f2bf85b51939ea43a45aaa487cc0f64, type: 3}
+  - name: "El\xE9phant"
+    sprite: {fileID: 21300000, guid: 982cf3679228a864e80cee7e54edac62, type: 3}
+  - name: "Alta\xEFr"
+    sprite: {fileID: 21300000, guid: 5252adc8dd8995349b2d5318e0c4ce28, type: 3}

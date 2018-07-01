@@ -36,6 +36,7 @@ public class DialogueBox : MonoBehaviour
 			textIsDisplayed = true;
 		});
 		isOpen = true;
+		Inventory.Instance.TogglePause(true);
 
 		title.text = t;
 	}
@@ -46,6 +47,7 @@ public class DialogueBox : MonoBehaviour
 		{
 			if (Input.anyKeyDown || Input.GetMouseButtonDown(0))
 			{
+				Inventory.Instance.TogglePause(false);
 				isOpen = false;
 				textIsDisplayed = false;
 				dialogue.text = "";

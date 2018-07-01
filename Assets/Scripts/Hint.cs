@@ -8,7 +8,7 @@ public class Hint : MonoBehaviour
 
 	void OnMouseDown()
 	{
-		if (!DialogueBox.Instance.isOpen)
+		if (!Inventory.Instance.gameIsPaused)
 			DialogueBox.Instance.DisplayDialogue(name, description);
 	}
 }
